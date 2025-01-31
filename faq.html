@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Navbar with Full-Width Image</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- FontAwesome for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Fancy Navbar */
+        .navbar {
+            background: linear-gradient(to right, #ffcc00, #ff9900);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 0px 0px 10px 10px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white !important;
+        }
+
+        .nav-link {
+            font-size: 18px;
+            font-weight: 500;
+            color: white !important; /* Ensuring navbar text stays white */
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffd700 !important; /* Gold Hover Effect */
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-color: white;
+            border-radius: 5px;
+        }
+
+        /* Full-Width Image */
+        .mobile-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .contact-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-links li {
+            margin: 15px 0;
+        }
+
+        .contact-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 10px;
+            font-size: 18px;
+            color: white;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .contact-links a i {
+            margin-right: 10px;
+        }
+
+        .whatsapp {
+            background-color: #25D366;
+        }
+
+        .whatsapp:hover {
+            background-color: #1ebc57;
+        }
+
+        .email {
+            background-color: #007bff;
+        }
+
+        .email:hover {
+            background-color: #0056b3;
+        }
+
+        .facebook {
+            background-color: #1877F2;
+        }
+
+        .facebook:hover {
+            background-color: #0f64c5;
+        }
+
+
+
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+            margin-bottom: 100px; /* Ensures space for footer */
+        }
+
+        /* Page Title */
+        .page-title {
+            text-align: center;
+            padding: 50px 20px;
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(to right, #ffcc00, #ff9900);
+            color: white;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* FAQ Section */
+        .faq-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .accordion-item {
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        .accordion-button {
+            background-color: #ffd700; /* Yellow background */
+            color: black;
+            font-weight: bold;
+            transition: 0.3s ease-in-out;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-button:hover {
+            background-color: #ffcc00; /* Slightly darker yellow */
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+
+        .accordion-body {
+            background: white;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            border-radius: 5px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(to right, #ff9900, #ffcc00);
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 18px;
+            font-weight: bold;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Arrow Animation */
+        .accordion-button::after {
+            content: "\f107";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-left: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .accordion-button.collapsed::after {
+            transform: rotate(180deg); /* Flip the arrow */
+        }
+   
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">MyWebsite</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="main.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="services.html">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faq.html">FAQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact Majid</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Full-Width Mobile Image -->
+    <img src="banner/banner.jpg" alt="Mobile Phone" class="mobile-img">
+
+   
+
+
+
+    <!-- Page Title -->
+    <div class="page-title">Frequently Asked Questions</div>
+
+    <!-- FAQ Section -->
+    <div class="faq-container">
+        <div class="accordion" id="faqAccordion">
+
+            <!-- General Questions -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        What types of mobile phones do you sell?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        We sell both brand-new and pre-owned (used) mobile phones from top brands, including budget-friendly options.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Do you offer a warranty on your products?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        Yes, brand-new phones come with the manufacturer’s warranty. Used phones come with a limited warranty of 3-6 months.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ordering & Payment -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        What payment methods do you accept?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        We accept cash-on-delivery (COD), online payments, bank transfers, and digital wallets.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                        Can I cancel or modify my order after placing it?
+                    </button>
+                </h2>
+                <div id="faq4" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        Yes, you can modify or cancel your order before it is shipped by contacting customer support.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                        How long does delivery take?
+                    </button>
+                </h2>
+                <div id="faq5" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        Delivery typically takes 2-5 business days, depending on your location.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Returns & Refunds -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                        What is your return policy?
+                    </button>
+                </h2>
+                <div id="faq6" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        We offer a hassle-free return policy within X days for defective products or incorrect items.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Support -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                        How can I contact customer support?
+                    </button>
+                </h2>
+                <div id="faq7" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        You can contact us via phone, email, or live chat. Our support team is available X hours a day.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2025 Margin Mobile Land | <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

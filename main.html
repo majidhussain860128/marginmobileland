@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Navbar with Full-Width Image</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- FontAwesome for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Fancy Navbar */
+        .navbar {
+            background: linear-gradient(to right, #ffcc00, #ff9900);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 0px 0px 10px 10px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white !important;
+        }
+
+        .nav-link {
+            font-size: 18px;
+            font-weight: 500;
+            color: white !important; /* Ensuring navbar text stays white */
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffd700 !important; /* Gold Hover Effect */
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-color: white;
+            border-radius: 5px;
+        }
+
+        /* Full-Width Image */
+        .mobile-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .contact-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-links li {
+            margin: 15px 0;
+        }
+
+        .contact-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 10px;
+            font-size: 18px;
+            color: white;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .contact-links a i {
+            margin-right: 10px;
+        }
+
+        
+
+          /* Footer */
+        .footer {
+            background: linear-gradient(to right, #ff9900, #ffcc00);
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 10px;
+            font-weight: bold;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">MyWebsite</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="main.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="services.html">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faq.html">FAQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact Majid</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Full-Width Mobile Image -->
+    <img src="banner/banner.jpg" alt="Mobile Phone" class="mobile-img">
+
+
+
+
+
+
+      <div class="bike">
+        <div class="image-bike">
+         <a href="links/oppo.html">
+            <img src="banner/oppo.png" alt="Tecno">
+         </a>
+        </div>
+        <div class="image-bike">
+
+        <a href="links/realme1.html">
+            <img src="banner/realme.png" alt="Product 2">
+        </a>
+        </div>
+        <div class="image-bike">
+          <a href="links/tecno.html">
+            <img src="banner/tecno.png" alt="Product 3">
+         </a>
+
+        </div>
+
+       
+
+        <div class="image-bike">
+           <a href="links/vivo.html">
+
+ <img src="banner/vivo.jpg" alt="Tecno">
+
+           </a>
+        </div>
+        <div class="image-bike">
+          
+           <a href="links/itel.html">
+            <img src="banner/itel.png" alt="Tecno">
+           </a>
+        </div>
+    </div>
+
+
+</br>
+</br>
+</br>
+
+
+
+
+
+
+
+   
+
+
+<!-- Footer -->
+    <div class="footer">
+        &copy; 2025 Margin Mobile Land by Majid | <a href="#">Privacy Policy</a> | <a href="https://wa.me/+923098936246">Whatsapp</a> | <a href="#">Terms & Conditios</a> | <a href="#">Terms & Conditions</a> | <a href="mailto: majidhussain860128@gmail.com">Email</a> | <a href="#">Facebook</a> 
+    </div>
+
+
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

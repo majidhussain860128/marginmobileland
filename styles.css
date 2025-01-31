@@ -1,0 +1,29 @@
+/* Ensure the page uses full width and height */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.bike {
+    display: auto;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.image-bike {
+    width: 100%;
+}
+
+.image-bike img {
+    width: 100%;
+    height: auto;
+}
+
+
+        
