@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Listing</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .filter-container {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .filter-container select {
+            padding: 6px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .image-box {
+            width: 90px;
+            height: 90px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* Keeps the aspect ratio without cropping */
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+            background: #fff;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #ff9800;
+            color: white;
+            cursor: pointer;
+        }
+
+        .image-box img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+        }
+
+
+
+        .sort-arrow {
+            margin-left: 5px;
+            font-size: 14px;
+        }
+
+        .sort-menu {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 10;
+            width: 120px;
+        }
+
+        .sort-menu button {
+            width: 100%;
+            padding: 5px;
+            border: none;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .sort-menu button:hover {
+            background: #f5f5f5;
+        }
+
+
+
+        .whatsapp-btn {
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .link-btn {
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            text-decoration: left;
+            color: white;
+        }
+
+        .video-btn {
+            border: none;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            text-decoration: none;
+            color: white;
+        }
+
+
+
+
+        .whatsapp-btn {
+            background-color: #25d366;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #1ebe57;
+        }
+
+        .link-btn {
+            background-color: #2196F3;
+        }
+
+        .link-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .video-btn {
+            background-color: #2196F3;
+        }
+
+        .video-btn:hover {
+            background-color: #19F629;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Mobile Listing</h2>
+
+    <div class="filter-container">
+        <select id="mobileBrandFilter" onchange="filterByBrand()">
+            <option value="all">Show All Brands</option>
+            <option value="Samsung">Samsung</option>
+            <option value="iPhone">iPhone</option>
+            <option value="Xiaomi">Xiaomi</option>
+        </select>
+
+        <select id="rowLimit" onchange="setRowLimit()">
+            <option value="25">Show 25 rows</option>
+            <option value="50">Show 50 rows</option>
+            <option value="100">Show 100 rows</option>
+        </select>
+    </div>
+
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search Mobile..." onkeyup="filterTable()">
+
+    <div class="table-container">
+        <table id="mobileTable">
+            <thead>
+                <tr>
+                    <th class="serial-number">#</th>
+                    <th onclick="toggleSortMenu('name')">Mobile Name <i class="fas fa-sort sort-arrow"></i>
+                        <div class="sort-menu" id="sort-name">
+                            <button onclick="sortTable(1, 'asc')">Sort by A-Z</button>
+                            <button onclick="sortTable(1, 'desc')">Sort by Z-A</button>
+                        </div>
+                    </th>
+                    <th onclick="toggleSortMenu('model')">Model <i class="fas fa-sort sort-arrow"></i>
+                        <div class="sort-menu" id="sort-model">
+                            <button onclick="sortTable(2, 'asc')">Sort by A-Z</button>
+                            <button onclick="sortTable(2, 'desc')">Sort by Z-A</button>
+                        </div>
+                    </th>
+                    <th onclick="toggleSortMenu('camera')">CAMRA <i class="fas fa-sort sort-arrow"></i>
+                        <div class="sort-menu" id="sort-camera">
+                            <button onclick="sortTable(3, 'desc')">Higher to Lower</button>
+                            <button onclick="sortTable(3, 'asc')">Lower to Higher</button>
+                        </div>
+                    </th>
+
+                    <th onclick="toggleSortMenu('ram')">RAM <i class="fas fa-sort sort-arrow"></i>
+                        <div class="sort-menu" id="sort-ram">
+                            <button onclick="sortTable(3, 'desc')">Higher to Lower</button>
+                            <button onclick="sortTable(3, 'asc')">Lower to Higher</button>
+                        </div>
+                    </th>
+
+                    <th onclick="toggleSortMenu('rom')">ROM <i class="fas fa-sort sort-arrow"></i>
+                        <div class="sort-menu" id="sort-rom">
+                            <button onclick="sortTable(3, 'desc')">Higher to Lower</button>
+                            <button onclick="sortTable(3, 'asc')">Lower to Higher</button>
+                        </div>
+                    </th>
+
+                    <th>Battery</th>
+                    <th onclick="toggleSortMenu('price')">Price <i class="fas fa-sort sort-arrow"></i>
+                        <div class="sort-menu" id="sort-price">
+                            <button onclick="sortTable(5, 'asc')">Lowest to Highest</button>
+                            <button onclick="sortTable(5, 'desc')">Highest to Lowest</button>
+                        </div>
+                    </th>
+
+                    <th> Color Selection</th>
+                    <th>Front Image</th>
+                    <th>Back Image</th>
+                    <th>Buy on WhatsApp</th>
+                    <th>Link</th>
+
+                    <th>Video</th>
+                </tr>
+            </thead>
+            <tbody id="mobileTableBody">
+                <tr class="Samsung">
+                    <td>1</td>
+                    <td>Samsung Galaxy</td>
+                    <td>S22 Ultra</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>5000mAh</td>
+                    <td>1800</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'samsung')">
+                            <option value="red">Red</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="samsung-front" src="black_front.jpg" alt="Front Image"></td>
+                    <td><img class="image-box" id="samsung-back" src="black_back.jpg" alt="Back Image"></td>
+                    <td><a class="whatsapp-btn" href="https://wa.me/923098936246">WhatsApp</a></td>
+                    <td><a class="link-btn" href="https://www.samsung.com">Visit</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+                <tr class="iPhone">
+                    <td>2</td>
+                    <td>iPhone</td>
+                    <td>14 Pro</td>
+
+                    <td>48</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>3200mAh</td>
+                    <td>2100</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'iphone')">
+                            <option value="gold">Gold</option>
+                            <option value="silver" selected>Silver</option>
+                            <option value="black">Black</option>
+                        </select>
+                    </td>
+                    <td><img id="iphone-front" src="silver_front.jpg" alt="Front Image"></td>
+                    <td><img id="iphone-back" src="silver_back.jpg" alt="Back Image"></td>
+                    <td><a class="whatsapp-btn" href="https://wa.me/923098936246">WhatsApp</a></td>
+                    <td><a class="link-btn" href="https://www.apple.com">Visit</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+                <tr class="Xiaomi">
+                    <td>3</td>
+                    <td>Xiaomi</td>
+                    <td>Mi 11</td>
+                    <td>108</td>
+                    <td>8 GB</td>
+                    <td>256 GB</td>
+                    <td>4600mAh</td>
+                    <td>1200</td>
+                    <td>
+                        <select onchange="updateMobileImage(this, 'xiaomi')">
+                            <option value="blue">Blue</option>
+                            <option value="black" selected>Black</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </td>
+                    <td><img class="image-box" id="xiaomi-front" src="black_front.webp" alt="Front Image"></td>
+                    <td><img class="image-box" id="xiaomi-back" src="black_back.webp" alt="Back Image"></td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="sendWhatsAppMessage(this)">WhatsApp</button>
+                    </td>
+
+
+
+
+                    <td><a class="link-btn" href="xiaomidetails.html">Details</a></td>
+                    <td><a class="video-btn" href="https://youtu.be/Kbskgh9ANBI?si=PCXFEbKpemHIKqjL">Video</a></td>
+                </tr>
+
+
+
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+
+
+        function sendWhatsAppMessage(button) {
+            let row = button.closest("tr"); // Get the row where the button was clicked
+            let serialNumber = row.cells[0].innerText;
+            let mobileName = row.cells[1].innerText;
+            let model = row.cells[2].innerText;
+            let camera = row.cells[3].innerText;
+            let battery = row.cells[4].innerText;
+            let price = row.cells[5].innerText;
+            let color = row.cells[6].querySelector("select").value; // Get selected color
+
+            // Format the message
+            let message = `Hello, I am interested in buying the following mobile:\n\n` +
+                `📌 *Serial No:* ${serialNumber}\n` +
+                `📱 *Mobile:* ${mobileName}\n` +
+                `🔹 *Model:* ${model}\n` +
+                `📷 *Camera:* ${camera} MP\n` +
+                `🔋 *Battery:* ${battery}\n` +
+                `💰 *Price:* $${price}\n` +
+                `🎨 *Color:* ${color}\n\n` +
+                `Please provide more details.`;
+
+            // Encode the message for URL
+            let encodedMessage = encodeURIComponent(message);
+
+            // WhatsApp link
+            let whatsappLink = `https://wa.me/923098936246?text=${encodedMessage}`;
+
+            // Open WhatsApp
+            window.open(whatsappLink, "_blank");
+        }
+
+
+
+
+
+
+        function toggleSortMenu(column) {
+            let sortMenu = document.getElementById('sort-' + column);
+            sortMenu.style.display = sortMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function sortTable(columnIndex, order) {
+            let table = document.getElementById("mobileTable");
+            let rows = Array.from(table.rows).slice(1);
+            rows.sort((rowA, rowB) => {
+                let cellA = rowA.cells[columnIndex].innerText;
+                let cellB = rowB.cells[columnIndex].innerText;
+
+                if (order === 'asc') {
+                    return isNaN(cellA) ? cellA.localeCompare(cellB) : cellA - cellB;
+                } else {
+                    return isNaN(cellA) ? cellB.localeCompare(cellA) : cellB - cellA;
+                }
+            });
+
+            rows.forEach(row => table.appendChild(row)); // Append sorted rows
+        }
+
+        function filterByBrand() {
+            let selectedBrand = document.getElementById('mobileBrandFilter').value;
+            let rows = document.querySelectorAll('#mobileTableBody tr');
+            rows.forEach(row => {
+                row.style.display = (selectedBrand === "all" || row.classList.contains(selectedBrand)) ? "" : "none";
+            });
+        }
+
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll('#mobileTableBody tr');
+            rows.forEach(row => {
+                let cells = Array.from(row.getElementsByTagName("td"));
+                let rowContainsSearch = cells.some(cell => cell.innerText.toLowerCase().includes(input));
+                row.style.display = rowContainsSearch ? "" : "none";
+            });
+        }
+
+        function setRowLimit() {
+            let limit = parseInt(document.getElementById("rowLimit").value, 10);
+            let rows = document.querySelectorAll('#mobileTableBody tr');
+            rows.forEach((row, index) => {
+                row.style.display = (index < limit) ? "" : "none";
+            });
+        }
+
+
+        function updateMobileImage(selectElement, mobileID) {
+            let color = selectElement.value;
+            document.getElementById(mobileID + "-front").src = color + "_front.webp";
+            document.getElementById(mobileID + "-back").src = color + "_back.webp";
+        }
+    </script>
+
+</body>
+
+</html>
