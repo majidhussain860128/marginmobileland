@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://majidhussain860128.github.io/marginmobileland/main/sitemap.xml
